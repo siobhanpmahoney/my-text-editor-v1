@@ -15,17 +15,16 @@ export function loadAllNotes() {
 }
 
 export function createNote(newNote) {
-  return(dispatch) => {
-    fetch("http://localhost:3000/api/v1/notes"),
-    {
-      method: 'post',
+  return (dispatch) => {
+    fetch('http://localhost:3000/api/v1/notes', {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accepts': 'application/json'
       },
       body: JSON.stringify({
         title: 'new note test',
-        content: convertToRaw(newNote)
+        content: newNote
       })
     }
     .then(response => response.json())
@@ -38,7 +37,7 @@ export function createNote(newNote) {
   }
 }
 
-export function updateNote(selectedNote) {
+export function updateNote(selectedNote, selectedNoteContent) {
   let url = `http://localhost:3000/api/v1/notes/selectedNote.id`
   return (dispatch) => {
     return fetch(url,
@@ -50,7 +49,7 @@ export function updateNote(selectedNote) {
         },
         body: JSON.stringify({
           title: selectedNote.title,
-          content: selectedNote.content,
+          content: selectedNoteContent,
           user_id: 1
         })
       })

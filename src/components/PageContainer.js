@@ -20,7 +20,7 @@ class PageContainer extends React.Component {
 
 
   selectSavedNote = (event) => {
-    event.preventDefault()
+
     let noteId = event.target.id
     let selectedNote = this.props.savedNotes.find((n) => {
       return n["id"] == noteId
@@ -36,8 +36,9 @@ class PageContainer extends React.Component {
     console.log("props", this.state.noteRendered)
     return (
       <div>
+      <button id="new" onClick={this.selectSavedNote}>New</button>
       <NoteList selectSavedNote={this.selectSavedNote}/>
-      <EditorContainer />
+      <EditorContainer noteRendered={this.state.noteRendered}/>
       </div>
     )
   }

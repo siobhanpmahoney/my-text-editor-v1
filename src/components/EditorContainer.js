@@ -9,29 +9,49 @@ import * as Actions from '../actions'
 class EditorContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { };
+    this.state = {
+      noteTitle: "",
+      editorState: EditorState.createEmpty()
+     };
+  }
 
-    const content = ls.get('content')
-
-    if (content) {
-      this.state.editorState = EditorState.createWithContent(convertFromRaw(JSON.parse(content)));
+  componentDidMount() {
+    if (this.props.noteRendered != null && this.props.noteRendered != "new") {
+      this.setState({
+        noteTitle: this.props.noteRendered.title,
+        editorState: EditorState.createWithContent(convertFromRaw(this.props.noteRendered.content))
+      })
     } else {
-      this.state.editorState = EditorState.createEmpty();
+      this.setState({
+        noteTitle: "",
+        editorState: EditorState.createEmpty()
+      })
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.noteRendered != this.props.noteRendered) {
+      if (this.props.noteRendered != null) {
+        this.setState({
+          editorState: EditorState.createWithContent(convertFromRaw(this.props.noteRendered.content)) | EditorState.createWithContent(this.props.noteRendered.content)
+        })
+      }
     }
   }
 
   onChange = (editorState) => {
-    const contentState = editorState.getCurrentContent()
-    this.saveContent(contentState);
-    console.log('content state', convertToRaw(contentState));
     this.setState({
-      editorState
-    });
+     editorState
+   })
+   // const contentState = editorState.getCurrentContent()
+   // this.saveNewNote(contentState)
   }
 
-  saveContent = (content) => {
-    ls.set('content', JSON.stringify(convertToRaw(content)));
+  saveNewNote = () => {
+    const contentState = this.state.editorState.getCurrentContent()
+    this.props.createNote(JSON.stringify(convertToRaw(contentState)))
   }
+
 
   handleKeyCommand = (command) => {
     const newState = RichUtils.handleKeyCommand(this.state.editorState, command);
@@ -61,11 +81,14 @@ class EditorContainer extends React.Component {
   }
 
 
-  render() {
 
+
+  render() {
+    console.log(this.props.noteRendered)
 
     return (
       <div className="editorContainer">
+        <button onClick={this.saveNewNote}>Save</button>
         <button onClick={this.onUnderlineClick}>U</button>
         <button onClick={this.onBoldClick}><b>B</b></button>
         <button onClick={this.onItalicClick}><em>I</em></button>
