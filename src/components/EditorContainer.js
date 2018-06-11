@@ -1,6 +1,9 @@
 import React from 'react'
 import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
 import ls from 'local-storage'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as Actions from '../actions'
 
 
 class EditorContainer extends React.Component {
@@ -81,4 +84,14 @@ class EditorContainer extends React.Component {
   }
 }
 
-export default EditorContainer
+function mapStateToProps(state, props) {
+  return {
+    savedNotes: state.notes.savedNotes
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(Actions, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditorContainer);
