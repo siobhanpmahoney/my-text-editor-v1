@@ -6,7 +6,7 @@
     "draft-css": "^0.0.1",
     "draft-js": "^0.10.5",
     "local-storage": "^1.4.2",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.19",
     "react": "^16.4.0",
     "react-dom": "^16.4.2",
     "react-redux": "^5.0.7",
